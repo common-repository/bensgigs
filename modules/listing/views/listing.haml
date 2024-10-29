@@ -1,0 +1,222 @@
+:css
+  .clickable {color: blue}
+  .clickable:hover {cursor:pointer}
+  td .body {border: 1px solid black; -webkit-border-radius: 6px; margin: 10px; padding: 5px; background-color:white}
+  .keyword {background-color: yellow; padding: 2px}
+  .killword {background-color: red; padding: 2px}
+  .skill {background-color: lightgreen; padding-left: 3px; padding-right: 3px}
+  button.ham, button.spam, button.neither { width: 75px;}
+  button.ham {background-color: lightgreen}
+  button.spam {background-color: #FF8888}
+  button.neither {background-color: lightgray}
+  td.followed {background-color: lightyellow; text-align: center}
+  td.ignored {background-color: #aaaaaa; text-align: center}
+:js
+  function http_build_query (formdata, numeric_prefix, arg_separator) {
+      // http://kevin.vanzonneveld.net
+      // +   original by: Kevin van Zonneveld (http://kevin.vanzonneveld.net)
+      // +   improved by: Legaev Andrey
+      // +   improved by: Michael White (http://getsprink.com)
+      // +   improved by: Kevin van Zonneveld (http://kevin.vanzonneveld.net)
+      // +   improved by: Brett Zamir (http://brett-zamir.me)
+      // +    revised by: stag019
+      // +   input by: Dreamer
+      // +   bugfixed by: Brett Zamir (http://brett-zamir.me)
+      // -    depends on: urlencode
+      // *     example 1: http_build_query({foo: 'bar', php: 'hypertext processor', baz: 'boom', cow: 'milk'}, '', '&amp;');
+      // *     returns 1: 'foo=bar&amp;php=hypertext+processor&amp;baz=boom&amp;cow=milk'
+      // *     example 2: http_build_query({'php': 'hypertext processor', 0: 'foo', 1: 'bar', 2: 'baz', 3: 'boom', 'cow': 'milk'}, 'myvar_');
+      // *     returns 2: 'php=hypertext+processor&myvar_0=foo&myvar_1=bar&myvar_2=baz&myvar_3=boom&cow=milk'
+      var value, key, tmp = [],
+          that = this;
+  
+      var _http_build_query_helper = function (key, val, arg_separator) {
+          var k, tmp = [];
+          if (val === true) {
+              val = "1";
+          } else if (val === false) {
+              val = "0";
+          }
+          if (val !== null && typeof(val) === "object") {
+              for (k in val) {
+                  if (val[k] !== null) {
+                      tmp.push(_http_build_query_helper(key + "[" + k + "]", val[k], arg_separator));
+                  }
+              }
+              return tmp.join(arg_separator);
+          } else if (typeof(val) !== "function") {
+              return that.urlencode(key) + "=" + that.urlencode(val);
+          } else {
+              throw new Error('There was an error processing for http_build_query().');
+          }
+      };
+  
+      if (!arg_separator) {
+          arg_separator = "&";
+      }
+      for (key in formdata) {
+          value = formdata[key];
+          if (numeric_prefix && !isNaN(key)) {
+              key = String(numeric_prefix) + key;
+          }
+          tmp.push(_http_build_query_helper(key, value, arg_separator));
+      }
+  
+      return tmp.join(arg_separator);
+  }
+  
+  function urlencode (str) {
+      // http://kevin.vanzonneveld.net
+      // +   original by: Philip Peterson
+      // +   improved by: Kevin van Zonneveld (http://kevin.vanzonneveld.net)
+      // +      input by: AJ
+      // +   improved by: Kevin van Zonneveld (http://kevin.vanzonneveld.net)
+      // +   improved by: Brett Zamir (http://brett-zamir.me)
+      // +   bugfixed by: Kevin van Zonneveld (http://kevin.vanzonneveld.net)
+      // +      input by: travc
+      // +      input by: Brett Zamir (http://brett-zamir.me)
+      // +   bugfixed by: Kevin van Zonneveld (http://kevin.vanzonneveld.net)
+      // +   improved by: Lars Fischer
+      // +      input by: Ratheous
+      // +      reimplemented by: Brett Zamir (http://brett-zamir.me)
+      // +   bugfixed by: Joris
+      // +      reimplemented by: Brett Zamir (http://brett-zamir.me)
+      // %          note 1: This reflects PHP 5.3/6.0+ behavior
+      // %        note 2: Please be aware that this function expects to encode into UTF-8 encoded strings, as found on
+      // %        note 2: pages served as UTF-8
+      // *     example 1: urlencode('Kevin van Zonneveld!');
+      // *     returns 1: 'Kevin+van+Zonneveld%21'
+      // *     example 2: urlencode('http://kevin.vanzonneveld.net/');
+      // *     returns 2: 'http%3A%2F%2Fkevin.vanzonneveld.net%2F'
+      // *     example 3: urlencode('http://www.google.nl/search?q=php.js&ie=utf-8&oe=utf-8&aq=t&rls=com.ubuntu:en-US:unofficial&client=firefox-a');
+      // *     returns 3: 'http%3A%2F%2Fwww.google.nl%2Fsearch%3Fq%3Dphp.js%26ie%3Dutf-8%26oe%3Dutf-8%26aq%3Dt%26rls%3Dcom.ubuntu%3Aen-US%3Aunofficial%26client%3Dfirefox-a'
+      str = (str + '').toString();
+  
+      // Tilde should be allowed unescaped in future versions of PHP (as reflected below), but if you want to reflect current
+      // PHP behavior, you would need to add ".replace(/~/g, '%7E');" to the following.
+      return encodeURIComponent(str).replace(/!/g, '%21').replace(/'/g, '%27').replace(/\(/g, '%28').
+      replace(/\)/g, '%29').replace(/\*/g, '%2A').replace(/%20/g, '+');
+  } 
+  
+  function ajax_url(action, params)
+  {
+    url = "/wp-admin/admin-ajax.php";
+    params['action'] = action;
+    url = url + '?' + http_build_query(params);
+    return url;
+  }
+  
+  function follow(id)
+  {
+    tr = jQuery('#summary_'+id);
+    tr.html("<td colspan='3' class='followed'>Followed</td>");
+    jQuery('#detail_'+id).toggle();
+    e = jQuery('#b'+id);
+    jQuery.getScript(ajax_url('train', {id:id, type:'ham'}));;
+  }
+  function ignore(id)
+  {
+    tr = jQuery('#summary_'+id);
+    tr.html("<td colspan='3' class='ignored'>Ignored</td>");
+    jQuery('#detail_'+id).toggle();
+    e = jQuery('#b'+id);
+    jQuery.getScript(ajax_url('train', {id:id, type:'spam'}));;
+  }
+  
+.wrap
+  %h2 Ben's Gigs
+  .metabox-holder
+    %div#post-body
+      .postbox-container{:style=>'width: 75%'}
+        .meta-box-sortables.ui-sortable#left-sortables
+          .postbox#posts
+            .handlediv{:title=>"Click to Toggle"}
+            %h3.hndle +__('Latest Gigs')
+            .inside{:style=>"padding: 5px"}
+              :css
+                .noborder, .noborder th, .noborder td { border: none }
+                .noborder tr:hover {background-color: #f5f5ff}
+              =$ws->load_panel('messages');
+              %table
+                %tr
+                  -foreach($res as $k=>$arr)
+                    %th =humanize($k)
+                    %td =link_to(count($arr), full_url(array('type'=>$k)))
+              %table.wp-list-table.widefat.noborder.pages
+                :php
+                  $arr = $res[p('type','keyword')];
+                  if(!$arr) $arr = array();
+                -foreach($arr as $p_id)
+                  :php
+                    $p = $posts[$p_id];
+                    $id = 'detail_'.$p->id;
+                    $parts = parse_url($p->url)
+                  %tr{:id=>"summary_{$p->id}"}
+                    %td{:style=>'white-space: nowrap'} =ago($p->posted_at)
+                    %td
+                      .clickable{:onclick=>"jQuery('#$id').toggle()"}
+                        =$p->title
+                    %td =$parts['host']
+                  %tr{:id=>$id, :style=>'display:none'}
+                    %td{:colspan=>3}
+                      .body
+                        :php
+                          $b_id = "b{$p->id}";
+                          $status = $this_plugin_settings->options->training[$p->id];
+                          if($status==null) $status = 'neither';
+                          if($status==1) $status='ham';
+                          if($status==2) $status='spam';
+                        %table
+                          %tr
+                            %td
+                              %button{:onclick=>"follow($p->id);"} Follow
+                            %td
+                              %button{:onclick=>"ignore($p->id);"} Ignore
+                            %td +$p->score
+                            %td +$p->email
+                        =link_to($p->url, $p->url, 'target', '_blank')
+                        %hr
+                        =$p->body
+      .postbox-container{:style=>'width: 24%'}
+        .meta-box-sortables.ui-sortable#right-sortables
+          .postbox#feedback
+            .handlediv{:title=>"Click to Toggle"}
+            %h3.hndle +__('Do you like this Plugin?')
+            .inside{:style=>"padding: 5px"}
+              %p
+                Awesome. Do something then :)
+              %ul
+                %li
+                  %img{:src=>BENSGIGS_APP_VPATH."/assets/images/feedback.png", :width=>16}
+                  =link_to("Suggest features or report bugs", "http://bensgigs.uservoice.com/", 'target', '_blank')
+                %li
+                  %img{:src=>BENSGIGS_APP_VPATH."/assets/images/star.png", :width=>16}
+                  =link_to("Upvote us on WordPress.org", "http://wordpress.org/extend/plugins/bensgigs/")
+                %li
+                  %img{:src=>BENSGIGS_APP_VPATH."/assets/images/paypal.png", :width=>16}
+                  =page_to('Buy a day pass', 'bensgigs_day_pass')
+          .postbox#about
+            .handlediv{:title=>"Click to Toggle"}
+            %h3.hndle +__('All the Gigs Worth Having')
+            .inside{:style=>"padding: 5px"}
+              %h4 About
+              %p
+                Ben's Gigs scours the Internet for the sweetest freelance gigs.
+              %p
+                Made by a freelance programmer, Ben's Gigs sifts and sorts
+                through thousands of gigs on a daily basis. You can meet the founder at
+                =link_to('http://www.benallfree.com', 'http://www.benallfree.com')."."
+              %p
+                Ben's Gigs is free to use. A lot of people use it that way. Paid members
+                get advance access to new gigs.
+              %h4 Fair Gigging Policy
+              %p
+                Ben's gigs are made available immediately to day pass holders. If you don't have day pass, gigs are held for 5 days and are then shown here. 
+              %h4 Rules
+              %ol
+                %li You do not talk about Ben's Gigs.
+                %li You do NOT talk about Ben's Gigs.
+                %li If the client pays, the gig is over.
+                %li The gigs will go on as long as they have to.
+                %li If this is your first time with Ben's Gigs, you HAVE to gig.
+              

@@ -1,0 +1,66 @@
+.wrap
+  %h2 Day Pass
+  .metabox-holder
+    %div#post-body
+      .postbox-container{:style=>'width: 75%'}
+        .meta-box-sortables.ui-sortable#left-sortables
+          .postbox#posts
+            .handlediv{:title=>"Click to Toggle"}
+            %h3.hndle +__('Overview')
+            .inside{:style=>"padding: 5px"}
+              %h4 How Day Passes Work
+              %p
+                To see up-to-the-minute posts, you must purchase a day pass. The day pass is good for a certain number of days beginning from the time you first activate it.
+              %p
+                After purchasing a day pass, you will receive an email from us with a Day Pass Code. Input that code in the box above to redeem your day pass.
+              %p
+                Although you should receive your Day Pass Code immediately after purchase, please allow up to 24 hours for delivery.
+              %h4 Refund Policy
+              %p
+                Unused day passes are 100% refundable within 5 days of purchase.
+              %p
+                Day passes are non-refundable once activated. In the case of service outage, your day pass will be extended by one day or the duration of the outage, whichever is greater. 
+          .postbox#posts
+            .handlediv{:title=>"Click to Toggle"}
+            %h3.hndle +__('Status')
+            .inside{:style=>"padding: 5px"}
+              =$ws->load_panel('daypass_status')
+          .postbox#posts
+            .handlediv{:title=>"Click to Toggle"}
+            %h3.hndle +__('Redeem')
+            .inside{:style=>"padding: 5px"}
+              %p
+                If you bought a day pass, you should have received a code by email. Please enter that code here.
+              %p
+                Please note: if you currently have a day pass, it will remain active, but they are not cumulative. I.e., they will be active at the same time.
+              %p
+                If you are having trouble with your code or need assistance, please write to
+                =mail_to('daypass@bensgigs.com')."."
+              -if($errors)
+                %p
+                  .error
+                    %ul
+                      -foreach($errors as $e)
+                        %li +$e
+              =form_tag()
+              Day Pass Code
+              =text_tag('api_key')
+              =submit_tag('Save')
+              =end_form_tag()
+          .postbox#posts
+            .handlediv{:title=>"Click to Toggle"}
+            %h3.hndle +__('Purchase')
+            .inside#daypass_cart{:style=>"padding: 5px"}
+              =$ws->load_panel('daypass_cart', "Fetching latest pricing...", array('return_url'=>action('thanks'), 'cancel_url'=>action('')))
+      .postbox-container{:style=>'width: 24%'}
+        .meta-box-sortables.ui-sortable#left-sortables
+          .postbox#posts
+            .handlediv{:title=>"Click to Toggle"}
+            %h3.hndle +__("We're PayPal Verified")
+            .inside{:style=>"padding: 5px;"}
+              %p
+                Ben's Gigs is provided by Launchpoint Software Inc., a 
+                =link_to('verified business member of PayPal for over 10 years', 'https://www.paypal.com/us/verified/pal=benles%40bldigital%2ecom', 'target', '_blank')."." 
+              %div{:style=>'text-align: center'}
+                =eval_php($this_module_fpath."/templates/paypal_verified.php")
+                =eval_php($this_module_fpath."/templates/paypal_logo.php")

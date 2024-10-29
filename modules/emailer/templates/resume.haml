@@ -1,0 +1,168 @@
+:css
+  .resume {font-size: 10pt; font-family: Trebuchet MS, Verdana,ariel, sans-serif}
+  .resume table th, .resume table td { text-align: left; padding: 3px}
+  .resume h2 {color: #888; margin-top: 20px}
+  .resume .sample th, .resume .sample td {font-size: 9pt; vertical-align:top; text-align:left} 
+  .together {page-break-inside: avoid}
+.resume
+  %table{:style=>'width: 100%'}
+    %tr
+      %td{:style=>'text-align: center;white-space:nowrap'}
+        %h1 Benjamin C. Allfree
+        %p %b Software Application Developer and Architect
+      %td{:style=>'width: 150px'}
+        5662 Calle Real, #446
+        %br
+        Santa Barbara, CA  93117
+        %br
+        805-403-2380
+        %br
+        <a href="mailto:ben@benallfree.com">ben@benallfree.com</a>
+        %br
+        <a href="http://www.BenAllfree.com">http://www.benallfree.com</a>
+  %p
+    Greetings,
+  %p
+    I am responding to 
+    +"\"{$post->title}\", "
+    an engagement inquiry first found at
+    +$post->url . "."
+    
+  %p 
+    My name is Ben Allfree and I am the programmer you are seeking. I have specialized experience in 
+    %b +$rm->skills_list
+    as well as general pragmatism and wisdom that comes with experience. After just one look at my web site, you will agree that I have everything you need for the success you desire.
+    
+  %p
+    I reside in Santa Barbara, CA, though I have worked engagements nationally both on-site and off-site. I am able to work independently and remotely. Even from a remote location, I can seamlessly integrate with your needs via Skype, video chat, instant messaging, text, phone, and email.
+  
+  %p
+    I assembled the key points in my resume and portfolio based on your requested information. I am ready to get started right away. 
+  %p
+    For complete information, blog posts, podcasts, and general information, please do visit <a href="http://www.BenAllfree.com">http://www.BenAllfree.com</a>.    
+  
+  %p Thanks and have a great day. 
+  
+  %p
+  Ben Allfree, President
+  %br
+  BenAllfree.com
+  %br
+  5662 Calle Real, #446
+  %br
+  Santa Barbara, CA  93117
+  %br
+  <a href="http://www.BenAllfree.com">http://www.BenAllfree.com</a>
+  %br
+  805-403-2380
+  
+  %p{:style=>"page-break-after:always"}
+  
+  %table{:style=>'width: 100%'}
+    %tr
+      %td{:style=>'width: 90px'}
+        -$url = magick_img_url('tiny', '/art/benallfree.com/ben.png', array('rad'=>4, 'ds'=>false));
+        %img{:src=>$url}
+      %td{:style=>'text-align: center;white-space:nowrap'}
+        %h1 Benjamin C. Allfree
+        %p %b Software Application Developer and Architect
+      %td{:style=>'width: 150px'}
+        5662 Calle Real, #446
+        %br
+        Santa Barbara, CA  93117
+        %br
+        805-403-2380
+        %br
+        <a href="mailto:ben@benallfree.com">ben@benallfree.com</a>
+        %br
+        <a href="http://www.BenAllfree.com">http://www.benallfree.com</a>
+  
+  .together
+    %h2 SKILLS SUMMARY
+    %ul
+      -foreach($rm->skill_lines as $l)
+        %li +$l
+
+  .together
+    %h2 PROFESSIONAL EXPERIENCE
+    %ul
+      %li
+        %b President, BenAllfree.com,
+        1998-Present
+        %p
+          Lead and architected web application projects in multiple platforms and technologies. Primary focus is implementing new technology and core technology for startups, new ventures, and new web applications. Occasional maintenance programming. Expertise in project turn-arounds and rescues. Often take short or medium-term engagements with small and mid-sized companies and 'microstartups' of just 1-2 founders.
+    %p &nbsp;
+    
+    %h2 SPECIAL ENGAGEMENTS
+    %ul
+      %li
+        %b Lead Developer & Architect, Dorado Systems, 2011
+        %p
+          Bootstrapped engineering team, architected and lead a team to initial software implementation of a medical insurance validation system. Interfaced with major insurance carriers nationwide, performing EDI data conversion, XML translation, and creating a uniform web service architecture for customers. 
+      %li
+        %b
+          Director of Engineering, introNetworks, 2005
+        %p
+          Bootstrapped engineering team, architected and lead a team to initial software implementation of a social networking application. Focus on Flash, Flex, and .NET.
+      %li
+        %b
+          Professor of Computer Science, Indiana Institute of Technology, 2000
+        %p
+          Taught and mentored students in topics ranging from Discrete Mathematics to basic problem solving. 
+    %p &nbsp;
+    
+  %h2{:style=>'page-break-before:always'} PORTFOLIO AND SAMPLES
+  %p These pieces have been selected based on the skills requested. Other samples are available upon request.
+  %table.sample
+    -$c = 0
+    -foreach($rm->samples as $s)
+      %tr
+        %td{:colspan=>2}
+          :php
+            $style = ($c>=2 && $c % 2==0) ? 'page-break-before:always' : '';
+            $c++;
+          %h3{:style=>$style} +$s->title
+      %tr
+        %td
+          :php
+            $url = magick_img_url('sample', $s->highlight->screenshot->vpath, array('rad'=>4, 'ds'=>'#000'));
+            list($width, $height) = magick_size('sample', $s->highlight->screenshot->vpath,  array('rad'=>4, 'ds'=>'#000'));
+          =image_tag($url, 'width', $width, 'height', $height)
+        %td
+          %table
+            %tr
+              %th Picked Because You Asked For
+              %td +join(', ', collect($s->matched_skills, 'tag'))
+            %tr
+              %th What I Did
+              %td +$s->work_performed
+            %tr
+              %th Why It Matters
+              %td +$s->why_important
+            -foreach(array('operating_systems', 'frameworks', 'servers', 'techniques', 'languages') as $type)
+              %tr
+                %th =humanize($type)
+                %td =join(', ', collect($s->$type, 'name'))
+      %tr
+        %td{:colspan=>2}
+          &nbsp;
+  
+  .together
+    %h2 OUTSIDE INTERESTS
+    %ul
+      %li Accomplished singer/songwriter with demo recording credits
+      %li Novice Stand-up Paddleboarder
+      %li Accomplished auto and kart racer
+      %li =")'("
+      %li Accomplished audio recording engineer and podcaster 
+    %h2 REFERENCES
+    Please see <a href="http://www.benallfree.com/testimonials">http://www.benallfree.com/testimonials</a>.
+
+    %h2{:style=>'page-break-before:always'} TECHNICAL EXPERIENCE
+    %p This section can get long! But it has been tailored specifically to your requested requirements. Please see web site for full details.
+    %ul
+      -foreach($rm->skill_paragraphs as $k=>$p)
+        %li
+          %b +$k
+          %p
+            =simple_format(trim($p))

@@ -1,0 +1,26 @@
+:css
+  textarea {width: 600px; height: 300px}
+.wrap
+  %h2 Ben's Gigs
+  .metabox-holder
+    %div#post-body
+      .postbox-container{:style=>'width: 75%'}
+        .meta-box-sortables.ui-sortable#left-sortables
+          .postbox#posts
+            .handlediv{:title=>"Click to Toggle"}
+            %h3.hndle +__('Latest Gigs')
+            .inside{:style=>"padding: 5px"}
+              :css
+                .noborder, .noborder th, .noborder td { border: none }
+                .noborder tr:hover {background-color: #f5f5ff}
+              =form_tag()
+              %h1 Keywords and Filtering
+              %p This section controls the keywords that must be present or missing from the posts you see.
+              %h2 Keywords
+              %p Posts MUST contain at least one of these keywords. Separate keywords with spaces or line feeds.
+              =textarea_tag('keywords', join(', ', $this_plugin_settings->options->keywords))
+              %h2 Killwords
+              %p The posts MUST NOT contain ANY of these words.
+              =textarea_tag('killwords', join(', ', $this_plugin_settings->options->killwords))
+              %br
+              =submit_tag('Save')

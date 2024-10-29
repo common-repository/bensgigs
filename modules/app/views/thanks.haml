@@ -1,0 +1,26 @@
+.wrap
+  %h2 Day Pass
+  .metabox-holder
+    %div#post-body
+      .postbox-container{:style=>'width: 75%'}
+        .meta-box-sortables.ui-sortable#left-sortables
+          .postbox#posts
+            .handlediv{:title=>"Click to Toggle"}
+            %h3.hndle +__('Purchase Complete')
+            .inside{:style=>"padding: 5px"}
+              %p
+                Thanks for your purchase, we really appreciate it!
+              %p
+                Withing 24 hours, but probably almost immediately, you will recieve your Day Pass Code. When you do, you can input it here.
+              -if($errors)
+                .error
+                  %p
+                    %ul
+                      -foreach($errors as $e)
+                        %li +$e
+              =form_tag()
+              Day Pass Code
+              =text_tag('api_key')
+              =submit_tag('Save')
+              =end_form_tag()
+                

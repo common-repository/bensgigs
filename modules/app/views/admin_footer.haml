@@ -1,0 +1,12 @@
+-if(!$this_plugin_settings->last_access)
+  .updated
+    %p
+      Ben's Gigs has been installed, but you haven't tried it yet. 
+    %p
+      You'll notice a new option 
+      %b Ben's Gigs
+      on your admin bar to the left. Start finding your personalized leads today.
+    %p
+      .button.button-primary{:style=>'width:150px; text-align: center'}
+        =page_to("Browse Gigs Now", 'bensgigs')
+=$ws->fire_and_forget('ping')
